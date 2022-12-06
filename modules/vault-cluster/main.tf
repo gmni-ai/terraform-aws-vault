@@ -2,9 +2,9 @@
 # REQUIRE A SPECIFIC TERRAFORM VERSION OR HIGHER
 # ----------------------------------------------------------------------------------------------------------------------
 terraform {
-  # This module is now only being tested with Terraform 0.13.x. However, to make upgrading easier, we are setting
+  # This module is now only being tested with Terraform 1.0.x. However, to make upgrading easier, we are setting
   # 0.12.26 as the minimum version, as that version added support for required_providers with source URLs, making it
-  # forwards compatible with 0.13.x code.
+  # forwards compatible with 1.0.x code.
   required_version = ">= 0.12.26"
 }
 
@@ -243,6 +243,8 @@ resource "aws_iam_instance_profile" "instance_profile" {
 resource "aws_iam_role" "instance_role" {
   name_prefix        = var.cluster_name
   assume_role_policy = data.aws_iam_policy_document.instance_role.json
+
+  permissions_boundary = var.iam_permissions_boundary
 
   # aws_iam_instance_profile.instance_profile in this module sets create_before_destroy to true, which means
   # everything it depends on, including this resource, must set it as well, or you'll get cyclic dependency errors
