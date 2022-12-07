@@ -17,7 +17,7 @@ data "aws_caller_identity" "current" {}
 # ---------------------------------------------------------------------------------------------------------------------
 
 resource "aws_autoscaling_group" "autoscaling_group" {
-  name_prefix = var.cluster_name
+  name = var.cluster_name
 
   launch_template {
     id      = aws_launch_template.launch_configuration.id
@@ -153,7 +153,7 @@ resource "aws_launch_template" "launch_configuration" {
 # ---------------------------------------------------------------------------------------------------------------------
 
 resource "aws_security_group" "lc_security_group" {
-  name_prefix = var.cluster_name
+  name = var.cluster_name
   description = "Security group for the ${var.cluster_name} launch configuration"
   vpc_id      = var.vpc_id
 
@@ -227,7 +227,7 @@ module "security_group_rules" {
 # ---------------------------------------------------------------------------------------------------------------------
 
 resource "aws_iam_instance_profile" "instance_profile" {
-  name_prefix = var.cluster_name
+  name = var.cluster_name
   path        = var.instance_profile_path
   role        = aws_iam_role.instance_role.name
 
@@ -240,7 +240,7 @@ resource "aws_iam_instance_profile" "instance_profile" {
 }
 
 resource "aws_iam_role" "instance_role" {
-  name_prefix        = var.cluster_name
+  name        = var.cluster_name
   assume_role_policy = data.aws_iam_policy_document.instance_role.json
 
   permissions_boundary = var.iam_permissions_boundary
