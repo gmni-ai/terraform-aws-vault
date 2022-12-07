@@ -121,7 +121,9 @@ resource "aws_launch_template" "launch_configuration" {
     [aws_security_group.lc_security_group.id],
     var.additional_security_group_ids,
   )
-  tenancy           = var.tenancy
+  placement {
+    tenancy           = var.tenancy
+  }
 
   block_device_mappings {
     device_name = "/dev/sda1"
@@ -137,10 +139,7 @@ resource "aws_launch_template" "launch_configuration" {
   }
 
   iam_instance_profile {
-    name = var.enable_iam_setup ? element(
-      concat(aws_iam_instance_profile.instance_profile.*.name, [""]),
-      0,
-    ) : var.iam_instance_profile_name
+    name = aws_iam_instance_profile.instance_profile.name
   }
   metadata_options {
     http_endpoint = "enabled"
